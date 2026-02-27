@@ -14,7 +14,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/";
+  const redirect = searchParams.get("redirect") || "";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +25,7 @@ const Login = () => {
     const success = login(email, password);
     if (success) {
       toast({ title: "Welcome back!", description: "You've been logged in successfully." });
-      navigate(`/${redirect}`);
+      navigate(redirect ? `/${redirect}` : "/");
     }
   };
 
