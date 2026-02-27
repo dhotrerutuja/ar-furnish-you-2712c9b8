@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ChevronRight, ChevronDown, CreditCard, Smartphone, Banknote, Truck, MapPin, Shield, Check, Tag, Building2 } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
@@ -33,14 +33,14 @@ const Checkout = () => {
   const [activeStep, setActiveStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [address, setAddress] = useState({
-    firstName: user?.name?.split(" ")[0] || "",
-    lastName: user?.name?.split(" ").slice(1).join(" ") || "",
-    phone: user?.phone || "",
-    email: user?.email || "",
-    street: user?.address || "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    street: "",
     apartment: "",
-    city: user?.city || "",
-    pincode: user?.pincode || "",
+    city: "",
+    pincode: "",
     state: "Karnataka",
   });
   const [shippingMethod, setShippingMethod] = useState<"standard" | "express">("standard");
@@ -56,13 +56,33 @@ const Checkout = () => {
   const [processing, setProcessing] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
 
-  if (items.length === 0) {
-    navigate("/cart");
-    return null;
-  }
+  // Pre-fill address from user profile
+  useEffect(() => {
+    if (user) {
+      setAddress({
+        firstName: user.name?.split(" ")[0] || "",
+        lastName: user.name?.split(" ").slice(1).join(" ") || "",
+        phone: user.phone || "",
+        email: user.email || "",
+        street: user.address || "",
+        apartment: "",
+        city: user.city || "",
+        pincode: user.pincode || "",
+        state: "Karnataka",
+      });
+    }
+  }, [user]);
 
-  if (!isLoggedIn) {
-    navigate("/login?redirect=checkout");
+  // Redirect if cart empty or not logged in
+  useEffect(() => {
+    if (items.length === 0) {
+      navigate("/cart");
+    } else if (!isLoggedIn) {
+      navigate("/login?redirect=checkout");
+    }
+  }, [items.length, isLoggedIn, navigate]);
+
+  if (items.length === 0 || !isLoggedIn) {
     return null;
   }
 
@@ -286,7 +306,6 @@ const Checkout = () => {
                                 </div>
                               </label>
 
-                              {/* Inline card form */}
                               {paymentMethod === "card" && method.id === "card" && (
                                 <div className="mt-3 ml-12 space-y-3 border border-border rounded p-4 bg-muted/30">
                                   <div>
@@ -334,7 +353,6 @@ const Checkout = () => {
                       {/* STEP 4: Review & place order */}
                       {s.num === 4 && (
                         <div className="space-y-5">
-                          {/* Review address */}
                           <div className="bg-muted/50 rounded p-4">
                             <div className="flex items-center justify-between mb-2">
                               <h3 className="font-semibold text-sm text-foreground">Delivery Address</h3>
@@ -346,7 +364,6 @@ const Checkout = () => {
                             <p className="text-xs text-muted-foreground">{address.phone} · {address.email}</p>
                           </div>
 
-                          {/* Review payment */}
                           <div className="bg-muted/50 rounded p-4">
                             <div className="flex items-center justify-between mb-2">
                               <h3 className="font-semibold text-sm text-foreground">Payment Method</h3>
@@ -355,7 +372,6 @@ const Checkout = () => {
                             <p className="text-sm text-foreground capitalize">{paymentMethods.find(m => m.id === paymentMethod)?.label}</p>
                           </div>
 
-                          {/* Review items */}
                           <div className="space-y-3">
                             {items.map(({ product, quantity }) => (
                               <div key={product.id} className="flex items-center gap-3">
@@ -369,7 +385,6 @@ const Checkout = () => {
                             ))}
                           </div>
 
-                          {/* Terms */}
                           <label className="flex items-start gap-3 cursor-pointer">
                             <input type="checkbox" checked={agreedTerms} onChange={(e) => setAgreedTerms(e.target.checked)}
                               className="accent-primary mt-1" />
@@ -378,7 +393,6 @@ const Checkout = () => {
                             </span>
                           </label>
 
-                          {/* Place order */}
                           <button onClick={handlePlaceOrder} disabled={processing}
                             className="w-full bg-primary text-primary-foreground font-bold py-4 rounded text-sm hover:brightness-110 transition-all disabled:opacity-50 uppercase tracking-wide">
                             {processing ? "Processing Payment..." : `Place Order · ${formatPrice(finalTotal)}`}
