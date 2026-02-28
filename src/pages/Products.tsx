@@ -31,6 +31,11 @@ const Products = () => {
 
   const [selectedCategory, setSelectedCategory] = useState(categoryFilter);
   const [selectedPriceRange, setSelectedPriceRange] = useState<number | null>(null);
+
+  // Sync category filter when URL params change (e.g. clicking nav links)
+  React.useEffect(() => {
+    setSelectedCategory(categoryFilter);
+  }, [categoryFilter]);
   const [selectedMaterial, setSelectedMaterial] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [sortBy, setSortBy] = useState("popular");

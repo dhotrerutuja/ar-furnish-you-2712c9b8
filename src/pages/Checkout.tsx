@@ -337,38 +337,72 @@ const Checkout = () => {
 
                               {paymentMethod === "upi" && method.id === "upi" && (
                                 <div className="mt-3 ml-12 border border-border rounded p-4 bg-muted/30 space-y-4">
-                                  <p className="text-xs font-semibold text-foreground uppercase">Select your UPI app</p>
+                                  <div className="flex items-center justify-between">
+                                    <p className="text-xs font-semibold text-muted-foreground">UPI/BHIM</p>
+                                    <button type="button" className="text-xs text-primary font-medium hover:underline">Change</button>
+                                  </div>
+                                  <p className="text-sm font-medium text-foreground">Select your UPI app</p>
                                   <div className="grid grid-cols-2 gap-3">
                                     {[
-                                      { id: "bhim", name: "BHIM", color: "#00BCD4", icon: "₿" },
-                                      { id: "phonepe", name: "PhonePe", color: "#5F259F", icon: "Pe" },
-                                      { id: "paytm", name: "Paytm", color: "#00BAF2", icon: "₽" },
-                                      { id: "gpay", name: "GPay", color: "#4285F4", icon: "G" },
+                                      { id: "bhim", name: "BHIM",
+                                        logo: (
+                                          <div className="h-10 w-16 rounded border border-border bg-background flex items-center justify-center overflow-hidden">
+                                            <span className="text-xs font-black tracking-tight" style={{color: '#00838F'}}>
+                                              <span className="text-[10px] block leading-none text-muted-foreground">BHARAT INTERFACE FOR MONEY</span>
+                                              BHIM
+                                            </span>
+                                          </div>
+                                        )
+                                      },
+                                      { id: "phonepe", name: "PhonePe",
+                                        logo: (
+                                          <div className="h-10 w-16 rounded border border-border bg-background flex items-center justify-center">
+                                            <div className="flex items-center gap-0.5">
+                                              <div className="h-5 w-5 rounded-full flex items-center justify-center" style={{backgroundColor: '#5F259F'}}>
+                                                <span className="text-[10px] font-bold text-background">Pe</span>
+                                              </div>
+                                              <span className="text-[10px] font-bold" style={{color: '#5F259F'}}>PhonePe</span>
+                                            </div>
+                                          </div>
+                                        )
+                                      },
+                                      { id: "paytm", name: "Paytm",
+                                        logo: (
+                                          <div className="h-10 w-16 rounded border border-border bg-background flex items-center justify-center">
+                                            <span className="text-sm font-black" style={{color: '#00BAF2'}}>pay<span style={{color: '#002E6E'}}>tm</span></span>
+                                          </div>
+                                        )
+                                      },
+                                      { id: "gpay", name: "GPay (Tez)",
+                                        logo: (
+                                          <div className="h-10 w-16 rounded border border-border bg-background flex items-center justify-center">
+                                            <span className="text-sm font-bold">
+                                              <span style={{color: '#4285F4'}}>G</span>
+                                              <span className="text-muted-foreground text-xs"> Pay</span>
+                                              <span className="text-[8px] text-muted-foreground block leading-none">(Tez)</span>
+                                            </span>
+                                          </div>
+                                        )
+                                      },
                                     ].map((app) => (
                                       <button
                                         key={app.id}
                                         type="button"
                                         onClick={() => setSelectedUpiApp(app.id)}
-                                        className={`flex items-center gap-3 p-3 border-2 rounded-lg transition-all ${
+                                        className={`flex items-center justify-center p-2 border-2 rounded-lg transition-all ${
                                           selectedUpiApp === app.id
                                             ? "border-primary bg-primary/5 shadow-sm"
                                             : "border-border hover:border-primary/40 bg-background"
                                         }`}
                                       >
-                                        <div
-                                          className="h-10 w-10 rounded-lg flex items-center justify-center text-sm font-black text-background flex-shrink-0"
-                                          style={{ backgroundColor: app.color }}
-                                        >
-                                          {app.icon}
-                                        </div>
-                                        <span className="text-sm font-semibold text-foreground">{app.name}</span>
+                                        {app.logo}
                                       </button>
                                     ))}
                                   </div>
                                   <button
                                     type="button"
                                     onClick={() => setSelectedUpiApp("other")}
-                                    className={`w-full p-3 border-2 rounded-lg text-sm font-medium transition-all ${
+                                    className={`w-full p-3 border-2 rounded-lg text-sm font-semibold transition-all ${
                                       selectedUpiApp === "other"
                                         ? "border-primary bg-primary/5"
                                         : "border-border hover:border-primary/40 bg-background"
@@ -376,12 +410,14 @@ const Checkout = () => {
                                   >
                                     OTHER UPI APPS
                                   </button>
-                                  <div>
-                                    <label className="block text-xs font-semibold text-foreground mb-1">Enter UPI ID *</label>
-                                    <input value={upiId} onChange={(e) => setUpiId(e.target.value)} placeholder="yourname@upi"
-                                      className="w-full border border-border rounded px-3 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
-                                    <p className="text-xs text-primary mt-1 cursor-pointer hover:underline">How to pay using UPI?</p>
-                                  </div>
+                                  <p className="text-xs text-primary cursor-pointer hover:underline">How to pay using UPI?</p>
+                                  {(selectedUpiApp === "other" || selectedUpiApp) && (
+                                    <div>
+                                      <label className="block text-xs font-semibold text-foreground mb-1">Enter your UPI ID</label>
+                                      <input value={upiId} onChange={(e) => setUpiId(e.target.value)} placeholder="yourname@upi"
+                                        className="w-full border border-border rounded px-3 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
+                                    </div>
+                                  )}
                                 </div>
                               )}
                             </div>
