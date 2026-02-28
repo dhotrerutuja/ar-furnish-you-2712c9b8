@@ -1,14 +1,36 @@
 import sofa1 from "@/assets/products/sofa-1.jpg";
+import sofa2 from "@/assets/products/sofa-2.jpg";
+import sofa3 from "@/assets/products/sofa-3.jpg";
+import sofa4 from "@/assets/products/sofa-4.jpg";
+import sofa5 from "@/assets/products/sofa-5.jpg";
 import diningTable1 from "@/assets/products/dining-table-1.jpg";
+import diningTable2 from "@/assets/products/dining-table-2.jpg";
+import diningTable3 from "@/assets/products/dining-table-3.jpg";
 import bed1 from "@/assets/products/bed-1.jpg";
+import bed2 from "@/assets/products/bed-2.jpg";
+import bed3 from "@/assets/products/bed-3.jpg";
+import bed4 from "@/assets/products/bed-4.jpg";
+import bed5 from "@/assets/products/bed-5.jpg";
 import bookshelf1 from "@/assets/products/bookshelf-1.jpg";
 import desk1 from "@/assets/products/desk-1.jpg";
 import armchair1 from "@/assets/products/armchair-1.jpg";
+import armchair2 from "@/assets/products/armchair-2.jpg";
 import coffeeTable1 from "@/assets/products/coffee-table-1.jpg";
+import sideTable1 from "@/assets/products/side-table-1.jpg";
 import wardrobe1 from "@/assets/products/wardrobe-1.jpg";
 import tvUnit1 from "@/assets/products/tv-unit-1.jpg";
+import tvUnit2 from "@/assets/products/tv-unit-2.jpg";
 import kitchenCabinet1 from "@/assets/products/kitchen-cabinet-1.jpg";
+import kitchenIsland1 from "@/assets/products/kitchen-island-1.jpg";
+import kitchenShelf1 from "@/assets/products/kitchen-shelf-1.jpg";
 import nightstand1 from "@/assets/products/nightstand-1.jpg";
+import officeChair1 from "@/assets/products/office-chair-1.jpg";
+import drawerUnit1 from "@/assets/products/drawer-unit-1.jpg";
+import mirror1 from "@/assets/products/mirror-1.jpg";
+import mirror2 from "@/assets/products/mirror-2.jpg";
+import mirror3 from "@/assets/products/mirror-3.jpg";
+import cabinet1 from "@/assets/products/cabinet-1.jpg";
+import shelf1 from "@/assets/products/shelf-1.jpg";
 
 export interface Product {
   id: string;
@@ -46,7 +68,7 @@ export const categories: Category[] = [
   { id: "storage", name: "Storage & Organisation", image: bookshelf1, productCount: 67 },
   { id: "kitchen", name: "Kitchen & Dining", image: kitchenCabinet1, productCount: 41 },
   { id: "office", name: "Home Office", image: desk1, productCount: 29 },
-  { id: "mirrors", name: "Mirrors", image: bookshelf1, productCount: 15 },
+  { id: "mirrors", name: "Mirrors", image: mirror1, productCount: 15 },
 ];
 
 export const products: Product[] = [
@@ -273,8 +295,8 @@ export const products: Product[] = [
     subcategory: "2-seat sofa",
     price: 24990,
     originalPrice: 29990,
-    image: sofa1,
-    images: [sofa1],
+    image: sofa2,
+    images: [sofa2],
     rating: 4.4,
     reviewCount: 312,
     description: "Seat cushions filled with high resilience foam and polyester fibre wadding give comfortable support for your body.",
@@ -290,8 +312,8 @@ export const products: Product[] = [
     category: "sofas",
     subcategory: "Chaise lounge",
     price: 19990,
-    image: armchair1,
-    images: [armchair1],
+    image: sofa3,
+    images: [sofa3],
     rating: 4.6,
     reviewCount: 145,
     description: "KIVIK is a generous seating series with a soft, deep seat and comfortable support for your back.",
@@ -308,8 +330,8 @@ export const products: Product[] = [
     category: "tables",
     subcategory: "Side table",
     price: 799,
-    image: coffeeTable1,
-    images: [coffeeTable1],
+    image: sideTable1,
+    images: [sideTable1],
     rating: 4.1,
     reviewCount: 876,
     description: "Easy to assemble. Low weight; easy to move. A coffee table and side table in one. Available in multiple colours.",
@@ -326,8 +348,8 @@ export const products: Product[] = [
     category: "tables",
     subcategory: "Extendable table",
     price: 32990,
-    image: diningTable1,
-    images: [diningTable1],
+    image: diningTable2,
+    images: [diningTable2],
     rating: 4.5,
     reviewCount: 67,
     description: "An extendable table that goes from 4 to 6 seats in no time, so you are always prepared for extra guests.",
@@ -344,8 +366,8 @@ export const products: Product[] = [
     subcategory: "Bed frame with storage",
     price: 19990,
     originalPrice: 24990,
-    image: bed1,
-    images: [bed1],
+    image: bed2,
+    images: [bed2],
     rating: 4.2,
     reviewCount: 189,
     description: "This bed frame with 4 storage boxes is perfect when you need extra storage. Underbed storage keeps your things organised.",
@@ -361,8 +383,8 @@ export const products: Product[] = [
     category: "beds",
     subcategory: "Daybed with drawers",
     price: 17990,
-    image: bed1,
-    images: [bed1],
+    image: bed3,
+    images: [bed3],
     rating: 4.3,
     reviewCount: 234,
     description: "A sofa, a single bed, a double bed and storage – you get it all with this daybed.",
@@ -379,8 +401,8 @@ export const products: Product[] = [
     category: "office",
     subcategory: "Drawer unit",
     price: 7990,
-    image: desk1,
-    images: [desk1],
+    image: drawerUnit1,
+    images: [drawerUnit1],
     rating: 4.5,
     reviewCount: 567,
     description: "Drawer stops prevent the drawers from being pulled out too far. Can be placed on the left or right side of the desk.",
@@ -397,8 +419,8 @@ export const products: Product[] = [
     category: "office",
     subcategory: "Office chair",
     price: 14990,
-    image: armchair1,
-    images: [armchair1],
+    image: officeChair1,
+    images: [officeChair1],
     rating: 4.7,
     reviewCount: 892,
     description: "10-year guarantee. You can lean back with perfect balance, as the tilt tension mechanism auto-adjusts to your weight.",
@@ -415,8 +437,8 @@ export const products: Product[] = [
     category: "kitchen",
     subcategory: "Kitchen island",
     price: 18990,
-    image: kitchenCabinet1,
-    images: [kitchenCabinet1],
+    image: kitchenIsland1,
+    images: [kitchenIsland1],
     rating: 4.3,
     reviewCount: 78,
     description: "A flexible modular kitchen island that gives you extra workspace, storage, and a place to gather around.",
@@ -433,8 +455,8 @@ export const products: Product[] = [
     category: "kitchen",
     subcategory: "Kitchen shelf",
     price: 12990,
-    image: bookshelf1,
-    images: [bookshelf1],
+    image: kitchenShelf1,
+    images: [kitchenShelf1],
     rating: 4.4,
     reviewCount: 56,
     description: "Gives you extra storage, utility and workspace. Solid birch is a durable natural material with a beautiful grain pattern.",
@@ -451,8 +473,8 @@ export const products: Product[] = [
     subcategory: "Cabinet with base",
     price: 15990,
     originalPrice: 19990,
-    image: tvUnit1,
-    images: [tvUnit1],
+    image: cabinet1,
+    images: [cabinet1],
     rating: 4.5,
     reviewCount: 123,
     description: "Made of solid pine, a renewable and fast-growing material that gets more beautiful over time. Classic design in Scandinavian tradition.",
@@ -468,8 +490,8 @@ export const products: Product[] = [
     category: "storage",
     subcategory: "TV unit",
     price: 8990,
-    image: tvUnit1,
-    images: [tvUnit1],
+    image: tvUnit2,
+    images: [tvUnit2],
     rating: 4.6,
     reviewCount: 234,
     description: "This rustic TV bench has an industrial design with a sturdy metal frame and open shelves for easy access.",
@@ -487,8 +509,8 @@ export const products: Product[] = [
     subcategory: "Armchair",
     price: 8990,
     originalPrice: 11990,
-    image: armchair1,
-    images: [armchair1],
+    image: armchair2,
+    images: [armchair2],
     rating: 4.8,
     reviewCount: 1245,
     description: "The frame is made of layer-glued bent birch which is a very strong and durable material. Gives a very comfortable, slightly springy seating.",
@@ -505,8 +527,8 @@ export const products: Product[] = [
     category: "storage",
     subcategory: "Shelving unit",
     price: 3990,
-    image: bookshelf1,
-    images: [bookshelf1],
+    image: shelf1,
+    images: [shelf1],
     rating: 4.4,
     reviewCount: 345,
     description: "Untreated solid pine is a durable natural material that can be painted, oiled or stained according to your preference.",
@@ -523,8 +545,8 @@ export const products: Product[] = [
     category: "mirrors",
     subcategory: "Wall mirror",
     price: 7990,
-    image: bookshelf1,
-    images: [bookshelf1],
+    image: mirror1,
+    images: [mirror1],
     rating: 4.6,
     reviewCount: 234,
     description: "Full-length mirror with a walnut veneer frame. Safety film reduces damage if glass is broken.",
@@ -542,8 +564,8 @@ export const products: Product[] = [
     subcategory: "Full-length mirror",
     price: 3990,
     originalPrice: 4990,
-    image: bookshelf1,
-    images: [bookshelf1],
+    image: mirror2,
+    images: [mirror2],
     rating: 4.4,
     reviewCount: 456,
     description: "Can be hung horizontally or vertically. Made of solid wood, which is a durable and warm natural material.",
@@ -559,8 +581,8 @@ export const products: Product[] = [
     category: "mirrors",
     subcategory: "Round mirror",
     price: 2990,
-    image: bookshelf1,
-    images: [bookshelf1],
+    image: mirror3,
+    images: [mirror3],
     rating: 4.5,
     reviewCount: 189,
     description: "A round mirror with a thin black frame that blends right in. Perfect for hallways, bathrooms and living rooms.",
@@ -577,8 +599,8 @@ export const products: Product[] = [
     category: "mirrors",
     subcategory: "Wall mirror",
     price: 1990,
-    image: bookshelf1,
-    images: [bookshelf1],
+    image: mirror1,
+    images: [mirror1],
     rating: 4.3,
     reviewCount: 312,
     description: "Can be hung horizontally or vertically. Safety film reduces damage if glass is broken.",
@@ -596,8 +618,8 @@ export const products: Product[] = [
     subcategory: "Corner sofa",
     price: 54990,
     originalPrice: 64990,
-    image: sofa1,
-    images: [sofa1],
+    image: sofa4,
+    images: [sofa4],
     rating: 4.7,
     reviewCount: 178,
     description: "A sofa that invites the whole family. Comfortable, durable and easy to keep clean with removable, washable covers.",
@@ -613,8 +635,8 @@ export const products: Product[] = [
     category: "sofas",
     subcategory: "3-seat sofa",
     price: 29990,
-    image: sofa1,
-    images: [sofa1],
+    image: sofa5,
+    images: [sofa5],
     rating: 4.3,
     reviewCount: 267,
     description: "Sit deeply, low and softly with the elastic weave. Freely combine sections to create a sofa for your space.",
@@ -632,8 +654,8 @@ export const products: Product[] = [
     category: "beds",
     subcategory: "Bed frame",
     price: 9990,
-    image: bed1,
-    images: [bed1],
+    image: bed4,
+    images: [bed4],
     rating: 4.2,
     reviewCount: 345,
     description: "Made of solid pine, a natural and renewable material that gets more beautiful over time. Customize with stain or paint.",
@@ -650,8 +672,8 @@ export const products: Product[] = [
     subcategory: "Upholstered bed",
     price: 32990,
     originalPrice: 39990,
-    image: bed1,
-    images: [bed1],
+    image: bed5,
+    images: [bed5],
     rating: 4.6,
     reviewCount: 123,
     description: "Classic design with buttoned headboard. The soft upholstery creates a cozy atmosphere in the bedroom.",
@@ -669,8 +691,8 @@ export const products: Product[] = [
     category: "tables",
     subcategory: "Dining table",
     price: 15990,
-    image: diningTable1,
-    images: [diningTable1],
+    image: diningTable3,
+    images: [diningTable3],
     rating: 4.5,
     reviewCount: 198,
     description: "Each table has its own unique character due to the distinct grain pattern. Easy to assemble with pre-mounted fittings.",
