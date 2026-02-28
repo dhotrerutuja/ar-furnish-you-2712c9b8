@@ -46,6 +46,7 @@ const Checkout = () => {
   const [shippingMethod, setShippingMethod] = useState<"standard" | "express">("standard");
   const [paymentMethod, setPaymentMethod] = useState("upi");
   const [upiId, setUpiId] = useState("");
+  const [selectedUpiApp, setSelectedUpiApp] = useState("gpay");
   const [cardNumber, setCardNumber] = useState("");
   const [cardExpiry, setCardExpiry] = useState("");
   const [cardCvv, setCardCvv] = useState("");
@@ -335,10 +336,52 @@ const Checkout = () => {
                               )}
 
                               {paymentMethod === "upi" && method.id === "upi" && (
-                                <div className="mt-3 ml-12 border border-border rounded p-4 bg-muted/30">
-                                  <label className="block text-xs font-semibold text-foreground mb-1">UPI ID *</label>
-                                  <input value={upiId} onChange={(e) => setUpiId(e.target.value)} placeholder="yourname@upi"
-                                    className="w-full border border-border rounded px-3 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
+                                <div className="mt-3 ml-12 border border-border rounded p-4 bg-muted/30 space-y-4">
+                                  <p className="text-xs font-semibold text-foreground uppercase">Select your UPI app</p>
+                                  <div className="grid grid-cols-2 gap-3">
+                                    {[
+                                      { id: "bhim", name: "BHIM", color: "#00BCD4", icon: "₿" },
+                                      { id: "phonepe", name: "PhonePe", color: "#5F259F", icon: "Pe" },
+                                      { id: "paytm", name: "Paytm", color: "#00BAF2", icon: "₽" },
+                                      { id: "gpay", name: "GPay", color: "#4285F4", icon: "G" },
+                                    ].map((app) => (
+                                      <button
+                                        key={app.id}
+                                        type="button"
+                                        onClick={() => setSelectedUpiApp(app.id)}
+                                        className={`flex items-center gap-3 p-3 border-2 rounded-lg transition-all ${
+                                          selectedUpiApp === app.id
+                                            ? "border-primary bg-primary/5 shadow-sm"
+                                            : "border-border hover:border-primary/40 bg-background"
+                                        }`}
+                                      >
+                                        <div
+                                          className="h-10 w-10 rounded-lg flex items-center justify-center text-sm font-black text-background flex-shrink-0"
+                                          style={{ backgroundColor: app.color }}
+                                        >
+                                          {app.icon}
+                                        </div>
+                                        <span className="text-sm font-semibold text-foreground">{app.name}</span>
+                                      </button>
+                                    ))}
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => setSelectedUpiApp("other")}
+                                    className={`w-full p-3 border-2 rounded-lg text-sm font-medium transition-all ${
+                                      selectedUpiApp === "other"
+                                        ? "border-primary bg-primary/5"
+                                        : "border-border hover:border-primary/40 bg-background"
+                                    }`}
+                                  >
+                                    OTHER UPI APPS
+                                  </button>
+                                  <div>
+                                    <label className="block text-xs font-semibold text-foreground mb-1">Enter UPI ID *</label>
+                                    <input value={upiId} onChange={(e) => setUpiId(e.target.value)} placeholder="yourname@upi"
+                                      className="w-full border border-border rounded px-3 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
+                                    <p className="text-xs text-primary mt-1 cursor-pointer hover:underline">How to pay using UPI?</p>
+                                  </div>
                                 </div>
                               )}
                             </div>
