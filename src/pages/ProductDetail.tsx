@@ -6,6 +6,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import { useToast } from "@/hooks/use-toast";
 import ProductCard from "@/components/products/ProductCard";
+import ReviewSection from "@/components/products/ReviewSection";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
@@ -184,6 +185,9 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Reviews */}
+        <ReviewSection productId={product.id} />
 
         {/* Related products */}
         {relatedProducts.length > 0 && (
