@@ -4,6 +4,7 @@ import { Heart, ShoppingCart, Star } from "lucide-react";
 import { Product, formatPrice } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
+import { useReviews } from "@/contexts/ReviewContext";
 import { useToast } from "@/hooks/use-toast";
 
 interface ProductCardProps {
@@ -13,8 +14,13 @@ interface ProductCardProps {
 const ProductCard = ({ product }: ProductCardProps) => {
   const { addToCart } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
+  const { getAverageRating, getProductReviews } = useReviews();
   const { toast } = useToast();
   const wishlisted = isInWishlist(product.id);
+  const liveRating = getAverageRating(product.id);
+  const liveReviewCount = getProductReviews(product.id).length;
+  const displayRating = liveReviewCount > 0 ? liveRating : product.rating;
+  const displayReviewCount = liveReviewCount > 0 ? liveReviewCount : product.reviewCount;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -91,12 +97,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 <Star
                   key={star}
                   className={`h-3 w-3 ${
-                    star <= Math.floor(product.rating) ? "fill-secondary text-secondary" : "text-border"
+                    star <= Math.floor(displayRating) ? "fill-secondary text-secondary" : "text-border"
                   }`}
                 />
               ))}
             </div>
-            <span className="text-[10px] text-muted-foreground">({product.reviewCount})</span>
+            <span className="text-[10px] text-muted-foreground">({displayReviewCount})</span>
           </div>
         </div>
       </div>

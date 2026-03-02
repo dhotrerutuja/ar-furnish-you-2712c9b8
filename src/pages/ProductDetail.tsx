@@ -4,6 +4,7 @@ import { Heart, ShoppingCart, Star, Truck, Shield, RotateCcw, Minus, Plus, Chevr
 import { products, formatPrice } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
+import { useReviews } from "@/contexts/ReviewContext";
 import { useToast } from "@/hooks/use-toast";
 import ProductCard from "@/components/products/ProductCard";
 import ReviewSection from "@/components/products/ReviewSection";
@@ -16,6 +17,7 @@ const ProductDetail = () => {
   const product = products.find((p) => p.id === id);
   const { addToCart } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
+  const { getAverageRating, getProductReviews } = useReviews();
   const { toast } = useToast();
   const [quantity, setQuantity] = useState(1);
 
@@ -33,6 +35,10 @@ const ProductDetail = () => {
   }
 
   const wishlisted = isInWishlist(product.id);
+  const liveReviews = getProductReviews(product.id);
+  const liveRating = getAverageRating(product.id);
+  const displayRating = liveReviews.length > 0 ? liveRating : product.rating;
+  const displayReviewCount = liveReviews.length > 0 ? liveReviews.length : product.reviewCount;
   const relatedProducts = products.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4);
   const discount = product.originalPrice ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
 
@@ -84,10 +90,10 @@ const ProductDetail = () => {
             <div className="flex items-center gap-2 mt-3">
               <div className="flex">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} className={`h-4 w-4 ${star <= Math.floor(product.rating) ? "fill-secondary text-secondary" : "text-border"}`} />
+                  <Star key={star} className={`h-4 w-4 ${star <= Math.floor(displayRating) ? "fill-secondary text-secondary" : "text-border"}`} />
                 ))}
               </div>
-              <span className="text-sm text-muted-foreground">({product.reviewCount} reviews)</span>
+              <span className="text-sm text-muted-foreground">({displayReviewCount} reviews)</span>
             </div>
 
             {/* Price */}
