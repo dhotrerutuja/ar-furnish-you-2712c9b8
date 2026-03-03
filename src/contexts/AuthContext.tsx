@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 interface User {
   id: string;
@@ -21,12 +21,23 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const AUTH_KEY = "vh_auth";
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    try {
+      const raw = localStorage.getItem(AUTH_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  });
+
+  useEffect(() => {
+    if (user) localStorage.setItem(AUTH_KEY, JSON.stringify(user));
+    else localStorage.removeItem(AUTH_KEY);
+  }, [user]);
 
   const login = (email: string, _password: string) => {
-    // Mock login
-    setUser({
+    const u: User = {
       id: "user-1",
       name: "Guest User",
       email,
@@ -34,7 +45,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       address: "123, MG Road",
       city: "Bangalore",
       pincode: "560001",
-    });
+    };
+    setUser(u);
     return true;
   };
 

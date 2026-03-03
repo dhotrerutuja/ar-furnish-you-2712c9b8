@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { CartItem } from "./CartContext";
+import { products } from "@/data/products";
 
 export type OrderStatus = "placed" | "confirmed" | "shipped" | "out-for-delivery" | "delivered";
 
@@ -23,6 +24,8 @@ interface OrderContextType {
 
 const OrderContext = createContext<OrderContextType | undefined>(undefined);
 
+const ORDER_KEY = "vh_orders";
+
 const generateTimeline = (createdAt: Date): Order["timeline"] => {
   const d = new Date(createdAt);
   return [
@@ -34,8 +37,38 @@ const generateTimeline = (createdAt: Date): Order["timeline"] => {
   ];
 };
 
+const loadOrders = (): Order[] => {
+  try {
+    const raw = localStorage.getItem(ORDER_KEY);
+    if (!raw) return [];
+    const saved = JSON.parse(raw);
+    return saved.map((o: any) => ({
+      ...o,
+      createdAt: new Date(o.createdAt),
+      estimatedDelivery: new Date(o.estimatedDelivery),
+      timeline: o.timeline.map((t: any) => ({ ...t, date: new Date(t.date) })),
+      items: o.items.map((item: any) => {
+        const product = products.find((p) => p.id === item.productId);
+        return product ? { product, quantity: item.quantity } : null;
+      }).filter(Boolean),
+    }));
+  } catch {
+    return [];
+  }
+};
+
+const saveOrders = (orders: Order[]) => {
+  const serializable = orders.map((o) => ({
+    ...o,
+    items: o.items.map((i) => ({ productId: i.product.id, quantity: i.quantity })),
+  }));
+  localStorage.setItem(ORDER_KEY, JSON.stringify(serializable));
+};
+
 export const OrderProvider = ({ children }: { children: ReactNode }) => {
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<Order[]>(loadOrders);
+
+  useEffect(() => { saveOrders(orders); }, [orders]);
 
   const placeOrder = (items: CartItem[], totalAmount: number, paymentMethod: string, shippingAddress: string) => {
     const id = "VH-" + Date.now().toString(36).toUpperCase();
