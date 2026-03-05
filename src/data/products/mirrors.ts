@@ -1,6 +1,7 @@
 import mirror1 from "@/assets/products/mirror-1.jpg";
 import mirror2 from "@/assets/products/mirror-2.jpg";
 import mirror3 from "@/assets/products/mirror-3.jpg";
+import mirror4 from "@/assets/products/mirror-4.jpg";
 import { Product } from "../types";
 
 export const mirrorProducts: Product[] = [
@@ -64,8 +65,8 @@ export const mirrorProducts: Product[] = [
     category: "mirrors",
     subcategory: "Wall mirror",
     price: 1990,
-    image: mirror1,
-    images: [mirror1],
+    image: mirror4,
+    images: [mirror4],
     rating: 4.3,
     reviewCount: 312,
     description: "Can be hung horizontally or vertically. Safety film reduces damage if glass is broken.",
@@ -75,7 +76,6 @@ export const mirrorProducts: Product[] = [
     inStock: true,
     tags: ["mirror", "bedroom", "affordable"],
   },
-  // New mirrors
   {
     id: "116",
     name: "HOVET",
@@ -118,8 +118,8 @@ export const mirrorProducts: Product[] = [
     category: "mirrors",
     subcategory: "Round mirror",
     price: 1490,
-    image: mirror3,
-    images: [mirror3],
+    image: mirror4,
+    images: [mirror4],
     rating: 4.2,
     reviewCount: 567,
     description: "A simple round mirror with slim gold-coloured frame. Adds warmth and elegance to any room.",
@@ -152,8 +152,8 @@ export const mirrorProducts: Product[] = [
     category: "mirrors",
     subcategory: "Decorative mirror",
     price: 1990,
-    image: mirror1,
-    images: [mirror1],
+    image: mirror4,
+    images: [mirror4],
     rating: 4.4,
     reviewCount: 178,
     description: "A decorative set of mirrors in different shapes. Create your own composition on the wall.",
@@ -205,8 +205,8 @@ export const mirrorProducts: Product[] = [
     category: "mirrors",
     subcategory: "Arch mirror",
     price: 6990,
-    image: mirror2,
-    images: [mirror2],
+    image: mirror1,
+    images: [mirror1],
     rating: 4.5,
     reviewCount: 89,
     description: "An elegant arch-shaped mirror. Floor-standing or wall-mounted. Creates a stunning focal point.",
@@ -223,8 +223,8 @@ export const mirrorProducts: Product[] = [
     category: "mirrors",
     subcategory: "Mirror with LED light",
     price: 2990,
-    image: mirror3,
-    images: [mirror3],
+    image: mirror4,
+    images: [mirror4],
     rating: 4.4,
     reviewCount: 312,
     description: "Battery-operated mirror with integrated LED. Suction cup mounting – no drilling required. 5x magnification.",
