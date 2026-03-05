@@ -1,7 +1,9 @@
 import bookshelf1 from "@/assets/products/bookshelf-1.jpg";
+import bookshelf2 from "@/assets/products/bookshelf-2.jpg";
 import wardrobe1 from "@/assets/products/wardrobe-1.jpg";
 import tvUnit1 from "@/assets/products/tv-unit-1.jpg";
 import tvUnit2 from "@/assets/products/tv-unit-2.jpg";
+import tvUnit3 from "@/assets/products/tv-unit-3.jpg";
 import cabinet1 from "@/assets/products/cabinet-1.jpg";
 import shelf1 from "@/assets/products/shelf-1.jpg";
 import { Product } from "../types";
@@ -66,8 +68,8 @@ export const storageProducts: Product[] = [
     category: "storage",
     subcategory: "Shelf unit",
     price: 6490,
-    image: bookshelf1,
-    images: [bookshelf1],
+    image: bookshelf2,
+    images: [bookshelf2],
     rating: 4.7,
     reviewCount: 423,
     description: "A simple unit can be enough storage for a limited space or the start of a larger storage solution.",
@@ -131,7 +133,6 @@ export const storageProducts: Product[] = [
     inStock: true,
     tags: ["storage", "shelf", "affordable"],
   },
-  // New storage
   {
     id: "75",
     name: "EKET",
@@ -172,8 +173,8 @@ export const storageProducts: Product[] = [
     category: "storage",
     subcategory: "Bookcase",
     price: 9990,
-    image: bookshelf1,
-    images: [bookshelf1],
+    image: bookshelf2,
+    images: [bookshelf2],
     rating: 4.6,
     reviewCount: 456,
     description: "Solid wood with a classic design. Glass doors keep your collections dust-free. Adjustable shelves.",
@@ -244,8 +245,8 @@ export const storageProducts: Product[] = [
     category: "storage",
     subcategory: "Shelf unit",
     price: 4990,
-    image: shelf1,
-    images: [shelf1],
+    image: bookshelf1,
+    images: [bookshelf1],
     rating: 4.1,
     reviewCount: 345,
     description: "A slim shelving unit with tempered glass shelves and metal frame. Open, airy design for small spaces.",
@@ -296,8 +297,8 @@ export const storageProducts: Product[] = [
     category: "storage",
     subcategory: "TV storage combination",
     price: 24990,
-    image: tvUnit1,
-    images: [tvUnit1],
+    image: tvUnit3,
+    images: [tvUnit3],
     rating: 4.6,
     reviewCount: 234,
     description: "A complete TV storage solution with glass doors and drawers. Cable management built in. Clean, modern look.",

@@ -1,5 +1,6 @@
 import kitchenCabinet1 from "@/assets/products/kitchen-cabinet-1.jpg";
 import kitchenIsland1 from "@/assets/products/kitchen-island-1.jpg";
+import kitchenIsland2 from "@/assets/products/kitchen-island-2.jpg";
 import kitchenShelf1 from "@/assets/products/kitchen-shelf-1.jpg";
 import { Product } from "../types";
 
@@ -57,15 +58,14 @@ export const kitchenProducts: Product[] = [
     inStock: true,
     tags: ["kitchen", "shelf", "wood"],
   },
-  // New kitchen
   {
     id: "86",
     name: "KNOXHULT",
     category: "kitchen",
     subcategory: "Complete kitchen",
     price: 34990,
-    image: kitchenCabinet1,
-    images: [kitchenCabinet1],
+    image: kitchenIsland2,
+    images: [kitchenIsland2],
     rating: 4.2,
     reviewCount: 234,
     description: "A complete, ready-made kitchen with worktop, shelves, drawers and doors. Just add water and appliances.",
@@ -134,8 +134,8 @@ export const kitchenProducts: Product[] = [
     category: "kitchen",
     subcategory: "Kitchen fronts",
     price: 3490,
-    image: kitchenCabinet1,
-    images: [kitchenCabinet1],
+    image: kitchenIsland2,
+    images: [kitchenIsland2],
     rating: 4.3,
     reviewCount: 189,
     description: "Smooth, handleless kitchen fronts with integrated push-open mechanism. Sleek modern design.",
@@ -203,8 +203,8 @@ export const kitchenProducts: Product[] = [
     category: "kitchen",
     subcategory: "Pull-out drawer",
     price: 1990,
-    image: kitchenCabinet1,
-    images: [kitchenCabinet1],
+    image: kitchenIsland2,
+    images: [kitchenIsland2],
     rating: 4.6,
     reviewCount: 456,
     description: "Smooth-running drawers with drawer stops. Fully extendable for easy access to everything inside.",
@@ -273,8 +273,8 @@ export const kitchenProducts: Product[] = [
     category: "kitchen",
     subcategory: "Countertop",
     price: 3990,
-    image: kitchenIsland1,
-    images: [kitchenIsland1],
+    image: kitchenIsland2,
+    images: [kitchenIsland2],
     rating: 4.4,
     reviewCount: 234,
     description: "A laminate countertop with realistic oak pattern. Scratch and moisture resistant. Easy to cut to size.",
