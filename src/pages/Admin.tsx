@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   BarChart3, Package, ShoppingBag, Star, ArrowLeft,
-  IndianRupee, Heart, ShoppingCart,
+  IndianRupee, Heart, ShoppingCart, User, Mail, Phone,
 } from "lucide-react";
 import { products, categories, formatPrice } from "@/data/products";
 import { useOrders } from "@/contexts/OrderContext";
@@ -133,6 +133,7 @@ const Admin = () => {
                     <thead>
                       <tr className="border-b border-border">
                         <th className="text-left py-2 text-muted-foreground font-medium">Order ID</th>
+                        <th className="text-left py-2 text-muted-foreground font-medium">Customer</th>
                         <th className="text-left py-2 text-muted-foreground font-medium">Items</th>
                         <th className="text-left py-2 text-muted-foreground font-medium">Amount</th>
                         <th className="text-left py-2 text-muted-foreground font-medium">Status</th>
@@ -143,6 +144,7 @@ const Admin = () => {
                       {orders.slice(0, 5).map((order) => (
                         <tr key={order.id} className="border-b border-border last:border-0">
                           <td className="py-3 font-medium text-foreground">{order.id}</td>
+                          <td className="py-3 text-muted-foreground">{order.customer?.name || "N/A"}</td>
                           <td className="py-3 text-muted-foreground">{order.items.length} items</td>
                           <td className="py-3 text-foreground">{formatPrice(order.totalAmount)}</td>
                           <td className="py-3">
@@ -221,7 +223,7 @@ const Admin = () => {
           </div>
         )}
 
-        {/* Orders */}
+        {/* Orders with customer details */}
         {activeTab === "orders" && (
           <div className="bg-background rounded-lg border border-border">
             <div className="p-4 border-b border-border">
@@ -233,41 +235,60 @@ const Admin = () => {
                 <p className="text-muted-foreground">No orders yet. Place an order from the shop to see it here.</p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-border bg-muted/50">
-                      <th className="text-left p-3 text-muted-foreground font-medium">Order ID</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Items</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Total</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Payment</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Status</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium hidden sm:table-cell">Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {orders.map((order) => (
-                      <tr key={order.id} className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
-                        <td className="p-3 font-medium text-primary">{order.id}</td>
-                        <td className="p-3">
-                          {order.items.map((item, i) => (
-                            <p key={i} className="text-xs text-muted-foreground">{item.quantity}× {item.product.name}</p>
-                          ))}
-                        </td>
-                        <td className="p-3 font-medium text-foreground">{formatPrice(order.totalAmount)}</td>
-                        <td className="p-3 text-muted-foreground capitalize">{order.paymentMethod.replace(/-/g, " ")}</td>
-                        <td className="p-3">
+              <div className="divide-y divide-border">
+                {orders.map((order) => (
+                  <div key={order.id} className="p-4 hover:bg-muted/30 transition-colors">
+                    <div className="flex flex-col md:flex-row md:items-start gap-4">
+                      {/* Order info */}
+                      <div className="flex-1 space-y-2">
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <span className="font-bold text-primary text-sm">{order.id}</span>
                           <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                             order.status === "delivered" ? "bg-success/10 text-success" :
                             order.status === "shipped" ? "bg-primary/10 text-primary" :
                             "bg-secondary/30 text-secondary-foreground"
                           }`}>{order.status.replace(/-/g, " ").toUpperCase()}</span>
-                        </td>
-                        <td className="p-3 text-muted-foreground hidden sm:table-cell">{order.createdAt.toLocaleDateString("en-IN")}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                          <span className="text-xs text-muted-foreground">{order.createdAt.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</span>
+                        </div>
+
+                        {/* Customer details */}
+                        <div className="bg-muted/50 rounded-md p-3 space-y-1">
+                          <div className="flex items-center gap-2 text-sm">
+                            <User className="h-3.5 w-3.5 text-muted-foreground" />
+                            <span className="font-medium text-foreground">{order.customer?.name || "N/A"}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <Mail className="h-3.5 w-3.5 text-muted-foreground" />
+                            <span className="text-muted-foreground">{order.customer?.email || "N/A"}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <Phone className="h-3.5 w-3.5 text-muted-foreground" />
+                            <span className="text-muted-foreground">{order.customer?.phone || "N/A"}</span>
+                          </div>
+                        </div>
+
+                        {/* Items */}
+                        <div className="flex flex-wrap gap-2">
+                          {order.items.map((item, i) => (
+                            <div key={i} className="flex items-center gap-2 bg-background border border-border rounded-md px-2 py-1">
+                              <img src={item.product.image} alt={item.product.name} className="h-8 w-8 rounded object-cover" />
+                              <div>
+                                <p className="text-xs font-medium text-foreground">{item.product.name}</p>
+                                <p className="text-[10px] text-muted-foreground">Qty: {item.quantity}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Amount & payment */}
+                      <div className="text-right space-y-1 flex-shrink-0">
+                        <p className="text-lg font-black text-foreground">{formatPrice(order.totalAmount)}</p>
+                        <p className="text-xs text-muted-foreground capitalize">{order.paymentMethod.replace(/-/g, " ")}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>
