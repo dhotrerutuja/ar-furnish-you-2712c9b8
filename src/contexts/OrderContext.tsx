@@ -4,6 +4,12 @@ import { products } from "@/data/products";
 
 export type OrderStatus = "placed" | "confirmed" | "shipped" | "out-for-delivery" | "delivered";
 
+export interface OrderCustomer {
+  name: string;
+  email: string;
+  phone: string;
+}
+
 export interface Order {
   id: string;
   items: CartItem[];
@@ -11,6 +17,7 @@ export interface Order {
   status: OrderStatus;
   paymentMethod: string;
   shippingAddress: string;
+  customer: OrderCustomer;
   createdAt: Date;
   estimatedDelivery: Date;
   timeline: { status: OrderStatus; date: Date; completed: boolean }[];
@@ -18,7 +25,7 @@ export interface Order {
 
 interface OrderContextType {
   orders: Order[];
-  placeOrder: (items: CartItem[], totalAmount: number, paymentMethod: string, shippingAddress: string) => string;
+  placeOrder: (items: CartItem[], totalAmount: number, paymentMethod: string, shippingAddress: string, customer: OrderCustomer) => string;
   getOrder: (orderId: string) => Order | undefined;
 }
 
@@ -44,6 +51,7 @@ const loadOrders = (): Order[] => {
     const saved = JSON.parse(raw);
     return saved.map((o: any) => ({
       ...o,
+      customer: o.customer || { name: "N/A", email: "N/A", phone: "N/A" },
       createdAt: new Date(o.createdAt),
       estimatedDelivery: new Date(o.estimatedDelivery),
       timeline: o.timeline.map((t: any) => ({ ...t, date: new Date(t.date) })),
@@ -70,12 +78,12 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => { saveOrders(orders); }, [orders]);
 
-  const placeOrder = (items: CartItem[], totalAmount: number, paymentMethod: string, shippingAddress: string) => {
+  const placeOrder = (items: CartItem[], totalAmount: number, paymentMethod: string, shippingAddress: string, customer: OrderCustomer) => {
     const id = "VH-" + Date.now().toString(36).toUpperCase();
     const createdAt = new Date();
     const estimatedDelivery = new Date(createdAt.getTime() + 96 * 3600000);
     const order: Order = {
-      id, items, totalAmount, status: "confirmed", paymentMethod, shippingAddress, createdAt, estimatedDelivery,
+      id, items, totalAmount, status: "confirmed", paymentMethod, shippingAddress, customer, createdAt, estimatedDelivery,
       timeline: generateTimeline(createdAt),
     };
     setOrders((prev) => [order, ...prev]);

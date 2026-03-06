@@ -119,7 +119,12 @@ const Checkout = () => {
     setProcessing(true);
     setTimeout(() => {
       const addressStr = `${address.firstName} ${address.lastName}, ${address.street}${address.apartment ? ", " + address.apartment : ""}, ${address.city} - ${address.pincode}, ${address.state}. Phone: ${address.phone}`;
-      const orderId = placeOrder(items, finalTotal, paymentMethod, addressStr);
+      const customer = {
+        name: `${address.firstName} ${address.lastName}`.trim(),
+        email: address.email,
+        phone: address.phone,
+      };
+      const orderId = placeOrder(items, finalTotal, paymentMethod, addressStr, customer);
       clearCart();
       setProcessing(false);
       navigate(`/order-confirmation/${orderId}`);
@@ -315,170 +320,122 @@ const Checkout = () => {
                                       placeholder="•••• •••• •••• ••••"
                                       className="w-full border border-border rounded px-3 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
                                   </div>
+                                  <div className="grid grid-cols-2 gap-3">
+                                    <div>
+                                      <label className="block text-xs font-semibold text-foreground mb-1">Expiry *</label>
+                                      <input value={cardExpiry} onChange={(e) => setCardExpiry(e.target.value)}
+                                        placeholder="MM/YY"
+                                        className="w-full border border-border rounded px-3 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
+                                    </div>
+                                    <div>
+                                      <label className="block text-xs font-semibold text-foreground mb-1">CVV *</label>
+                                      <input value={cardCvv} onChange={(e) => setCardCvv(e.target.value)}
+                                        placeholder="•••" type="password"
+                                        className="w-full border border-border rounded px-3 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
+                                    </div>
+                                  </div>
                                   <div>
                                     <label className="block text-xs font-semibold text-foreground mb-1">Name on Card *</label>
                                     <input value={cardName} onChange={(e) => setCardName(e.target.value)}
                                       className="w-full border border-border rounded px-3 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
                                   </div>
-                                  <div className="grid grid-cols-2 gap-3">
-                                    <div>
-                                      <label className="block text-xs font-semibold text-foreground mb-1">Expiration (MM/YY) *</label>
-                                      <input value={cardExpiry} onChange={(e) => setCardExpiry(e.target.value)} placeholder="MM / YY"
-                                        className="w-full border border-border rounded px-3 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
-                                    </div>
-                                    <div>
-                                      <label className="block text-xs font-semibold text-foreground mb-1">Card Security Code *</label>
-                                      <input value={cardCvv} onChange={(e) => setCardCvv(e.target.value)} placeholder="CSC"
-                                        className="w-full border border-border rounded px-3 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
-                                    </div>
-                                  </div>
                                 </div>
                               )}
 
                               {paymentMethod === "upi" && method.id === "upi" && (
-                                <div className="mt-3 ml-12 border border-border rounded p-4 bg-muted/30 space-y-4">
-                                  <div className="flex items-center justify-between">
-                                    <p className="text-xs font-semibold text-muted-foreground">UPI/BHIM</p>
-                                    <button type="button" className="text-xs text-primary font-medium hover:underline">Change</button>
-                                  </div>
-                                  <p className="text-sm font-medium text-foreground">Select your UPI app</p>
-                                  <div className="grid grid-cols-2 gap-3">
+                                <div className="mt-3 ml-12 space-y-3 border border-border rounded p-4 bg-muted/30">
+                                  <div className="flex gap-3">
                                     {[
-                                      { id: "bhim", name: "BHIM",
-                                        logo: (
-                                          <div className="h-10 w-16 rounded border border-border bg-background flex items-center justify-center overflow-hidden">
-                                            <span className="text-xs font-black tracking-tight" style={{color: '#00838F'}}>
-                                              <span className="text-[10px] block leading-none text-muted-foreground">BHARAT INTERFACE FOR MONEY</span>
-                                              BHIM
-                                            </span>
-                                          </div>
-                                        )
-                                      },
-                                      { id: "phonepe", name: "PhonePe",
-                                        logo: (
-                                          <div className="h-10 w-16 rounded border border-border bg-background flex items-center justify-center">
-                                            <div className="flex items-center gap-0.5">
-                                              <div className="h-5 w-5 rounded-full flex items-center justify-center" style={{backgroundColor: '#5F259F'}}>
-                                                <span className="text-[10px] font-bold text-background">Pe</span>
-                                              </div>
-                                              <span className="text-[10px] font-bold" style={{color: '#5F259F'}}>PhonePe</span>
-                                            </div>
-                                          </div>
-                                        )
-                                      },
-                                      { id: "paytm", name: "Paytm",
-                                        logo: (
-                                          <div className="h-10 w-16 rounded border border-border bg-background flex items-center justify-center">
-                                            <span className="text-sm font-black" style={{color: '#00BAF2'}}>pay<span style={{color: '#002E6E'}}>tm</span></span>
-                                          </div>
-                                        )
-                                      },
-                                      { id: "gpay", name: "GPay (Tez)",
-                                        logo: (
-                                          <div className="h-10 w-16 rounded border border-border bg-background flex items-center justify-center">
-                                            <span className="text-sm font-bold">
-                                              <span style={{color: '#4285F4'}}>G</span>
-                                              <span className="text-muted-foreground text-xs"> Pay</span>
-                                              <span className="text-[8px] text-muted-foreground block leading-none">(Tez)</span>
-                                            </span>
-                                          </div>
-                                        )
-                                      },
+                                      { id: "gpay", label: "GPay" },
+                                      { id: "phonepe", label: "PhonePe" },
+                                      { id: "paytm", label: "Paytm" },
                                     ].map((app) => (
-                                      <button
-                                        key={app.id}
-                                        type="button"
+                                      <button key={app.id} type="button"
                                         onClick={() => setSelectedUpiApp(app.id)}
-                                        className={`flex items-center justify-center p-2 border-2 rounded-lg transition-all ${
-                                          selectedUpiApp === app.id
-                                            ? "border-primary bg-primary/5 shadow-sm"
-                                            : "border-border hover:border-primary/40 bg-background"
-                                        }`}
-                                      >
-                                        {app.logo}
-                                      </button>
+                                        className={`px-4 py-2 rounded text-sm font-medium border transition-colors ${
+                                          selectedUpiApp === app.id ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:border-primary/50"
+                                        }`}>{app.label}</button>
                                     ))}
                                   </div>
-                                  <button
-                                    type="button"
-                                    onClick={() => setSelectedUpiApp("other")}
-                                    className={`w-full p-3 border-2 rounded-lg text-sm font-semibold transition-all ${
-                                      selectedUpiApp === "other"
-                                        ? "border-primary bg-primary/5"
-                                        : "border-border hover:border-primary/40 bg-background"
-                                    }`}
-                                  >
-                                    OTHER UPI APPS
-                                  </button>
-                                  <p className="text-xs text-primary cursor-pointer hover:underline">How to pay using UPI?</p>
-                                  {(selectedUpiApp === "other" || selectedUpiApp) && (
-                                    <div>
-                                      <label className="block text-xs font-semibold text-foreground mb-1">Enter your UPI ID</label>
-                                      <input value={upiId} onChange={(e) => setUpiId(e.target.value)} placeholder="yourname@upi"
-                                        className="w-full border border-border rounded px-3 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
-                                    </div>
-                                  )}
+                                  <div>
+                                    <label className="block text-xs font-semibold text-foreground mb-1">UPI ID</label>
+                                    <input value={upiId} onChange={(e) => setUpiId(e.target.value)}
+                                      placeholder="yourname@upi"
+                                      className="w-full border border-border rounded px-3 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
+                                  </div>
                                 </div>
                               )}
                             </div>
                           ))}
                           <button onClick={() => completeStep(3)}
                             className="mt-2 bg-foreground text-background font-bold py-3 px-8 rounded text-sm hover:opacity-90 transition-opacity">
-                            Review & place order
+                            Review order
                           </button>
                         </div>
                       )}
 
-                      {/* STEP 4: Review & place order */}
+                      {/* STEP 4: Review */}
                       {s.num === 4 && (
-                        <div className="space-y-5">
-                          <div className="bg-muted/50 rounded p-4">
-                            <div className="flex items-center justify-between mb-2">
-                              <h3 className="font-semibold text-sm text-foreground">Delivery Address</h3>
-                              <button onClick={() => setActiveStep(1)} className="text-xs text-primary hover:underline">Edit</button>
-                            </div>
-                            <p className="text-sm text-foreground">{address.firstName} {address.lastName}</p>
-                            <p className="text-xs text-muted-foreground">{address.street}{address.apartment ? `, ${address.apartment}` : ""}</p>
-                            <p className="text-xs text-muted-foreground">{address.city} - {address.pincode}, {address.state}</p>
-                            <p className="text-xs text-muted-foreground">{address.phone} · {address.email}</p>
-                          </div>
-
-                          <div className="bg-muted/50 rounded p-4">
-                            <div className="flex items-center justify-between mb-2">
-                              <h3 className="font-semibold text-sm text-foreground">Payment Method</h3>
-                              <button onClick={() => setActiveStep(3)} className="text-xs text-primary hover:underline">Edit</button>
-                            </div>
-                            <p className="text-sm text-foreground capitalize">{paymentMethods.find(m => m.id === paymentMethod)?.label}</p>
-                          </div>
-
-                          <div className="space-y-3">
-                            {items.map(({ product, quantity }) => (
-                              <div key={product.id} className="flex items-center gap-3">
-                                <img src={product.image} alt={product.name} className="h-14 w-14 rounded object-cover border border-border" />
+                        <div className="space-y-4">
+                          <div className="divide-y divide-border border border-border rounded">
+                            {items.map((item) => (
+                              <div key={item.product.id} className="flex items-center gap-3 p-3">
+                                <img src={item.product.image} alt={item.product.name} className="h-12 w-12 rounded object-cover flex-shrink-0" />
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-foreground truncate">{product.name}</p>
-                                  <p className="text-xs text-muted-foreground">{product.color} · Qty: {quantity}</p>
+                                  <p className="text-sm font-medium text-foreground truncate">{item.product.name}</p>
+                                  <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
                                 </div>
-                                <p className="text-sm font-bold text-foreground">{formatPrice(product.price * quantity)}</p>
+                                <p className="text-sm font-bold text-foreground">{formatPrice(item.product.price * item.quantity)}</p>
                               </div>
                             ))}
                           </div>
 
+                          <div className="bg-muted/50 rounded p-4 space-y-2 text-sm">
+                            <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>{formatPrice(totalPrice)}</span></div>
+                            <div className="flex justify-between"><span className="text-muted-foreground">GST (18%)</span><span>{formatPrice(gst)}</span></div>
+                            <div className="flex justify-between"><span className="text-muted-foreground">Shipping ({shippingMethod})</span><span>{shippingCost === 0 ? "FREE" : formatPrice(shippingCost)}</span></div>
+                            {couponApplied && <div className="flex justify-between text-success"><span>Coupon Discount</span><span>-{formatPrice(couponDiscount)}</span></div>}
+                            <div className="flex justify-between font-bold text-base border-t border-border pt-2 mt-2"><span>Total</span><span className="text-primary">{formatPrice(finalTotal)}</span></div>
+                          </div>
+
+                          {/* Coupon */}
+                          {!couponApplied && (
+                            <div className="flex gap-2">
+                              <div className="relative flex-1">
+                                <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                <input value={couponCode} onChange={(e) => setCouponCode(e.target.value)}
+                                  placeholder="Enter coupon code"
+                                  className="w-full border border-border rounded px-3 py-2.5 pl-9 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
+                              </div>
+                              <button onClick={applyCoupon}
+                                className="bg-foreground text-background font-bold py-2.5 px-5 rounded text-sm hover:opacity-90">Apply</button>
+                            </div>
+                          )}
+
+                          {/* Terms */}
                           <label className="flex items-start gap-3 cursor-pointer">
-                            <input type="checkbox" checked={agreedTerms} onChange={(e) => setAgreedTerms(e.target.checked)}
-                              className="accent-primary mt-1" />
-                            <span className="text-xs text-muted-foreground">
-                              I have read and agree to the website <span className="text-primary underline">terms and conditions</span> *
-                            </span>
+                            <input type="checkbox" checked={agreedTerms} onChange={(e) => setAgreedTerms(e.target.checked)} className="mt-1 accent-primary" />
+                            <span className="text-xs text-muted-foreground">I agree to the Terms & Conditions and Privacy Policy. I confirm that the information provided is accurate.</span>
                           </label>
 
+                          {/* Place order */}
                           <button onClick={handlePlaceOrder} disabled={processing}
-                            className="w-full bg-primary text-primary-foreground font-bold py-4 rounded text-sm hover:brightness-110 transition-all disabled:opacity-50 uppercase tracking-wide">
-                            {processing ? "Processing Payment..." : `Place Order · ${formatPrice(finalTotal)}`}
+                            className={`w-full font-bold py-4 rounded text-sm transition-all ${
+                              processing ? "bg-muted text-muted-foreground cursor-wait" : "bg-primary text-primary-foreground hover:brightness-110"
+                            }`}>
+                            {processing ? (
+                              <span className="flex items-center justify-center gap-2">
+                                <span className="h-4 w-4 border-2 border-muted-foreground border-t-transparent rounded-full animate-spin" />
+                                Processing payment...
+                              </span>
+                            ) : (
+                              `Place Order — ${formatPrice(finalTotal)}`
+                            )}
                           </button>
 
                           <div className="flex items-center gap-2 text-xs text-muted-foreground justify-center">
-                            <Shield className="h-4 w-4" /> 100% Secure Checkout · SSL Encrypted
+                            <Shield className="h-4 w-4" />
+                            <span>Secure checkout. Your data is encrypted and protected.</span>
                           </div>
                         </div>
                       )}
@@ -489,88 +446,39 @@ const Checkout = () => {
             })}
           </div>
 
-          {/* Right: Order Summary */}
+          {/* Right: Order summary sidebar */}
           <div className="lg:col-span-5">
-            <div className="bg-background rounded border border-border p-6 sticky top-32">
-              <h2 className="font-bold text-lg text-foreground mb-4">Summary</h2>
-
-              {/* Coupon */}
-              <div className="mb-5">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                  <Tag className="h-4 w-4" /> Have a Coupon?
-                </div>
-                {!couponApplied ? (
-                  <div className="flex gap-2">
-                    <input value={couponCode} onChange={(e) => setCouponCode(e.target.value)} placeholder="Coupon code"
-                      className="flex-1 border border-border rounded px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
-                    <button onClick={applyCoupon}
-                      className="bg-primary text-primary-foreground font-bold px-4 py-2 rounded text-xs uppercase hover:brightness-110 transition-all">
-                      Apply
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2 bg-success/10 border border-success/30 rounded p-2">
-                    <Check className="h-4 w-4 text-success" />
-                    <span className="text-sm font-medium text-success">{couponCode.toUpperCase()}</span>
-                    <span className="text-xs text-muted-foreground ml-auto">-{formatPrice(couponDiscount)}</span>
-                  </div>
-                )}
-                <p className="text-xs text-muted-foreground mt-1">Try: WELCOME10 or FLAT500</p>
+            <div className="bg-background rounded border border-border sticky top-4">
+              <div className="p-4 border-b border-border">
+                <h2 className="font-bold text-foreground">Order Summary</h2>
               </div>
-
-              {/* Price breakdown */}
-              <div className="space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Subtotal ({items.length} items)</span>
-                  <span className="font-medium text-foreground">{formatPrice(totalPrice)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">GST (18%)</span>
-                  <span className="font-medium text-foreground">{formatPrice(gst)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Shipping</span>
-                  <span className={`font-medium ${shippingCost === 0 ? "text-success" : "text-foreground"}`}>
-                    {shippingCost === 0 ? "FREE" : formatPrice(shippingCost)}
-                  </span>
-                </div>
-                {couponApplied && (
-                  <div className="flex justify-between text-success">
-                    <span>Coupon Discount</span>
-                    <span className="font-medium">-{formatPrice(couponDiscount)}</span>
-                  </div>
-                )}
-                <div className="border-t border-border pt-3 flex justify-between">
-                  <span className="font-bold text-foreground text-base">Total</span>
-                  <span className="font-black text-lg text-foreground">{formatPrice(finalTotal)}</span>
-                </div>
-              </div>
-
-              {/* Cart items preview */}
-              <div className="mt-6 border-t border-border pt-4">
-                <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                  🛒 Cart ({items.length} Items)
-                </h3>
-                <div className="space-y-3 max-h-64 overflow-y-auto">
-                  {items.map(({ product, quantity }) => (
-                    <div key={product.id} className="flex items-center gap-3">
-                      <img src={product.image} alt={product.name} className="h-14 w-14 rounded object-cover border border-border" />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-foreground truncate">{product.name}</p>
-                        <p className="text-xs text-muted-foreground">{product.color} · {product.material}</p>
-                        <p className="text-xs text-muted-foreground">Quantity: {quantity}</p>
-                      </div>
-                      <p className="text-sm font-bold text-foreground">{formatPrice(product.price * quantity)}</p>
+              <div className="p-4 space-y-3">
+                {items.map((item) => (
+                  <div key={item.product.id} className="flex items-center gap-3">
+                    <div className="relative">
+                      <img src={item.product.image} alt={item.product.name} className="h-16 w-16 rounded object-cover" />
+                      <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-[10px] h-5 w-5 rounded-full flex items-center justify-center font-bold">{item.quantity}</span>
                     </div>
-                  ))}
-                </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">{item.product.name}</p>
+                      <p className="text-xs text-muted-foreground">{item.product.subcategory}</p>
+                    </div>
+                    <p className="text-sm font-bold text-foreground">{formatPrice(item.product.price * item.quantity)}</p>
+                  </div>
+                ))}
               </div>
-
-              {/* Help */}
-              <div className="mt-6 border-t border-border pt-4 text-xs text-muted-foreground">
-                <p className="font-semibold text-foreground mb-1">Need help?</p>
-                <p>Call us: <span className="text-primary">1800-419-4532</span></p>
-                <p>Mon-Fri 9am-6pm IST</p>
+              <div className="p-4 border-t border-border space-y-2 text-sm">
+                <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span className="text-foreground">{formatPrice(totalPrice)}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">GST (18%)</span><span className="text-foreground">{formatPrice(gst)}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Delivery</span><span className={shippingCost === 0 ? "text-success font-medium" : "text-foreground"}>{shippingCost === 0 ? "FREE" : formatPrice(shippingCost)}</span></div>
+                {couponApplied && <div className="flex justify-between text-success"><span>Discount</span><span>-{formatPrice(couponDiscount)}</span></div>}
+                <div className="flex justify-between font-bold text-base border-t border-border pt-2"><span className="text-foreground">Total</span><span className="text-primary">{formatPrice(finalTotal)}</span></div>
+              </div>
+              <div className="p-4 border-t border-border">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <MapPin className="h-4 w-4 flex-shrink-0" />
+                  <span>Free delivery on orders above ₹5,000</span>
+                </div>
               </div>
             </div>
           </div>
